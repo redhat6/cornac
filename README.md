@@ -54,9 +54,9 @@ python3 setup.py install
 
 **Note:** 
 
-Additional dependencies required by models are listed [here](cornac/models/README.md).
+Additional dependencies required by models are listed [here](README.md#Models).
 
-Some of the algorithms use `OpenMP` to support multi-threading. For OSX users, in order to run those algorithms efficiently, you might need to install `gcc` from Homebrew to have an OpenMP compiler:
+Some algorithm implementations use `OpenMP` to support multi-threading. For OSX users, in order to run those algorithms efficiently, you might need to install `gcc` from Homebrew to have an OpenMP compiler:
 
 ```sh
 brew install gcc | brew link gcc
@@ -76,27 +76,23 @@ If you want to utilize your GPUs, you might consider:
 Load the built-in [MovieLens 100K](https://grouplens.org/datasets/movielens/100k/) dataset (will be downloaded if not cached):
 
 ```python
-from cornac.datasets import movielens
+import cornac
 
-ml_100k = movielens.load_feedback()
+ml_100k = cornac.datasets.movielens.load_feedback(variant="100K")
 ```
 
 Split the data based on ratio:
 
 ```python
-from cornac.eval_methods import RatioSplit
-
-ratio_split = RatioSplit(data=ml_100k, test_size=0.2, rating_threshold=4.0, seed=123)
+rs = cornac.eval_methods.RatioSplit(data=ml_100k, test_size=0.2, rating_threshold=4.0, seed=123)
 ```
 
 Here we are comparing `Biased MF`, `PMF`, and `BPR`:
   
 ```python
-from cornac.models import MF, PMF, BPR
-
-mf = MF(k=10, max_iter=25, learning_rate=0.01, lambda_reg=0.02, use_bias=True, seed=123)
-pmf = PMF(k=10, max_iter=100, learning_rate=0.001, lamda=0.001, seed=123)
-bpr = BPR(k=10, max_iter=200, learning_rate=0.001, lambda_reg=0.01, seed=123)
+mf = cornac.models.MF(k=10, max_iter=25, learning_rate=0.01, lambda_reg=0.02, use_bias=True, seed=123)
+pmf = cornac.models.PMF(k=10, max_iter=100, learning_rate=0.001, lamda=0.001, seed=123)
+bpr = cornac.models.BPR(k=10, max_iter=200, learning_rate=0.001, lambda_reg=0.01, seed=123)
 ```
 
 Define metrics used to evaluate the models:
@@ -112,13 +108,10 @@ auc = cornac.metrics.AUC()
 Put everything together into an experiment and run it:
   
 ```python
-from cornac import Experiment
-
-exp = Experiment(eval_method=ratio_split,
-                 models=[mf, pmf, bpr],
-                 metrics=[mae, rmse, rec_20, ndcg_20, auc],
-                 user_based=True)
-exp.run()
+cornac.Experiment(eval_method=rs,
+                  models=[mf, pmf, bpr],
+                  metrics=[mae, rmse, rec_20, ndcg_20, auc],
+                  user_based=True).run()
 ```
 
 **Output:**
@@ -127,7 +120,7 @@ exp.run()
 | --- | -----: | -----: | --------: | ------: | -----: | --------: | -------: |
 | [MF](cornac/models/mf)  | 0.7431 | 0.9000 |    0.0654 |  0.0556 | 0.7485 |    0.0762 |   1.3927 |
 | [PMF](cornac/models/pmf) | 0.7538 | 0.9143 |    0.0880 |  0.0719 | 0.7779 |    4.1340 |   1.2292 |
-| [BPR](cornac/models/bpr) | N/A | N/A |    0.1449 |  0.1125 | 0.8715 |    2.3332 |   1.3235 |
+| [BPR](cornac/models/bpr) | N/A | N/A |    0.1449 |  0.1124 | 0.8707 |    2.3332 |   1.3235 |
 
 For more details, please take a look at our [examples](examples).
 
@@ -148,7 +141,7 @@ The recommender models supported by Cornac are listed below. Why don't you join 
 |      | [Multi-Layer Perceptron (MLP)](cornac/models/ncf), [paper](https://arxiv.org/pdf/1708.05031.pdf) | [requirements.txt](cornac/models/ncf/requirements.txt) | [ncf_exp.py](examples/ncf_example.py)
 |      | [Neural Matrix Factorization (NeuMF) / Neural Collaborative Filtering (NCF)](cornac/models/ncf), [paper](https://arxiv.org/pdf/1708.05031.pdf) | [requirements.txt](cornac/models/ncf/requirements.txt) | [ncf_exp.py](examples/ncf_example.py)
 |      | [Online Indexable Bayesian Personalized Ranking (Online IBPR)](cornac/models/online_ibpr), [paper](http://www.hadylauw.com/publications/cikm17a.pdf) | [requirements.txt](cornac/models/online_ibpr/requirements.txt) |
-|      | [Visual Matrix Factorization (VMF)](cornac/models/vmf), [paper](http://papers.www2017.com.au.s3-website-ap-southeast-2.amazonaws.com/proceedings/p1113.pdf) | [requirements.txt](cornac/models/vmf/requirements.txt) |
+|      | [Visual Matrix Factorization (VMF)](cornac/models/vmf), [paper](http://papers.www2017.com.au.s3-website-ap-southeast-2.amazonaws.com/proceedings/p1113.pdf) | [requirements.txt](cornac/models/vmf/requirements.txt) | [vmf_clothing.py](examples/vmf_clothing.py)
 | 2016 | [Collaborative Deep Ranking (CDR)](cornac/models/cdr), [paper](http://inpluslab.com/chenliang/homepagefiles/paper/hao-pakdd2016.pdf) | [requirements.txt](cornac/models/cdr/requirements.txt) | [cdr_exp.py](examples/cdr_example.py)
 |      | [Collaborative Ordinal Embedding (COE)](cornac/models/coe), [paper](http://www.hadylauw.com/publications/sdm16.pdf) | [requirements.txt](cornac/models/coe/requirements.txt) |
 |      | [Convolutional Matrix Factorization (ConvMF)](cornac/models/conv_mf), [paper](http://uclab.khu.ac.kr/resources/publication/C_351.pdf) | [requirements.txt](cornac/models/conv_mf/requirements.txt) | [convmf_exp.py](examples/conv_mf_example.py)

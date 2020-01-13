@@ -14,6 +14,8 @@
 
 [conv_mf_example.py](conv_mf_example.py) - Text data associate with items/users.
 
+[param_search.py](param_search.py) - Hyper-parameter tuning with GridSearch and RandomSearch.
+
 ----
 
 ## Multimodal Algorithms (Using Auxiliary Data)
@@ -49,6 +51,8 @@
 ### Image
 
 [vbpr_tradesy.py](vbpr_tradesy.py) - Visual Bayesian Personalized Ranking (VBPR) with Tradesy dataset.
+
+[vmf_clothing.py](vmf_clothing.py) - Visual Matrix Factorization (VMF) with Amazon Clothing dataset.
 
 ## Unimodal Algorithms
 
