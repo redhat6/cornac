@@ -5,7 +5,9 @@ If you are new to Cornac, the [Getting Started](#getting-started) tutorials are 
 ## Getting Started
 
 - [Installation](../README.md#installation)
-- [Your first Cornac experiment](../README.md#getting-started-your-first-cornac-experiment)  
+- [Your first Cornac experiment](../README.md#getting-started-your-first-cornac-experiment) 
+- [Hyperparameter search for VAECF](./param_search_vaecf.ipynb)
+- [Introduction to BPR, using Cornac with Microsoft Recommenders](https://github.com/microsoft/recommenders/blob/master/notebooks/02_model/cornac_bpr_deep_dive.ipynb)
 
 ## Contributing
 
